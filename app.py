@@ -107,17 +107,17 @@ if uploaded_file is not None:
             r2_status = "🟢 Excelente"
 
         # P-valor da correlação com ✔️ caso seja significativo
-        p_status = "✔️" if p_value < 0.05 else "❌"
+        p_status = "✅ Normal" if p_value < 0.05 else "❌"
 
         # Lista formatada com estatísticas
         stats_list = f"""
         - **Intercepto (α):** {intercept:,.2f}  
         - **Coeficiente Angular (β):** {slope:,.2f}  
+        - **P-valor da Correlação:** {p_value:,.4f} {p_status}  
         - **Erro Absoluto Médio (MAE):** {mae:,.2f}  
         - **Erro Padrão dos Resíduos (RMSE):** {rmse:,.2f}  
         - **Coeficiente de Determinação (R²):** {r_squared:,.4f} {r2_status}  
         - **Correlação de Pearson:** {correlation:,.4f}  
-        - **P-valor da Correlação:** {p_value:,.4f} {p_status}  
         - **Média dos Resíduos:** {residuals_mean:,.2e}  
         - **Teste de Normalidade dos Resíduos (Shapiro-Wilk):**  
           **P-valor:** {shapiro_p_value:,.4f} {'✅ Normal' if shapiro_p_value > 0.05 else '❌ Não Normal'}
