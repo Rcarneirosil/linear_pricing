@@ -107,7 +107,7 @@ if uploaded_file is not None:
             r2_status = "🟢 - Excelente"
 
         # P-valor da correlação com ✔️ caso seja significativo
-        p_status = "✔️" if p_value < 0.05 else "❌"
+        p_status = "✅ Normal" if p_value < 0.05 else "❌ Não Normal"
 
         # Lista formatada com estatísticas
         stats_list = f"""
