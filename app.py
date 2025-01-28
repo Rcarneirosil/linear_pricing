@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 import scipy.stats as stats
 import altair as alt
 
@@ -41,11 +42,20 @@ if uploaded_file is not None:
         # Cálculo do preço ótimo (E = -1)
         price_optimal = -intercept / (2 * slope)
 
-        # R² (Coeficiente de Determinação)
+        # Estatísticas do modelo
         r_squared = model.score(X, y)
+        y_pred = model.predict(X)
+        mae = mean_absolute_error(y, y_pred)
+        rmse = np.sqrt(mean_squared_error(y, y_pred))
 
         # Correlação de Pearson
         correlation, p_value = stats.pearsonr(data['Price'], data['Quantity'])
+
+        # Resíduos
+        residuals = y - y_pred
+        residuals_mean = residuals.mean()
+        shapiro_test = stats.shapiro(residuals.flatten())
+        shapiro_p_value = shapiro_test.pvalue
 
         # Criando um intervalo contínuo de preços para a reta de regressão
         price_range = np.linspace(data['Price'].min(), data['Price'].max(), 100).reshape(-1, 1)
@@ -57,7 +67,7 @@ if uploaded_file is not None:
         x_min, x_max = data['Price'].min(), data['Price'].max()
         y_min, y_max = data['Quantity'].min(), data['Quantity'].max()
 
-        # ======================= 🟢 1. Cabeçalho do Dashboard =======================
+        # ======================= 🟢 1. Indicadores Principais =======================
         st.subheader("📌 Indicadores Principais")
         col1, col2 = st.columns(2)
 
@@ -87,18 +97,25 @@ if uploaded_file is not None:
 
         st.altair_chart(final_chart, use_container_width=True)
 
-        # ======================= 🟠 3. Demais Métricas Estatísticas =======================
+        # ======================= 🟠 3. Estatísticas Complementares =======================
         st.subheader("📊 Estatísticas Complementares")
         col3, col4 = st.columns(2)
 
         with col3:
             st.metric("Intercepto (α)", f"{intercept:.2f}")
             st.metric("Coeficiente Angular (β)", f"{slope:.2f}")
+            st.metric("Erro Absoluto Médio (MAE)", f"{mae:.2f}")
+            st.metric("Erro Padrão dos Resíduos (RMSE)", f"{rmse:.2f}")
 
         with col4:
             st.metric("Coeficiente de Determinação (R²)", f"{r_squared:.4f}")
             st.metric("Correlação de Pearson", f"{correlation:.4f}")
-            st.metric("P-valor", f"{p_value:.4f}")
+            st.metric("P-valor da Correlação", f"{p_value:.4f}")
+            st.metric("Média dos Resíduos", f"{residuals_mean[0]:.2e}")
+
+        # Teste de Normalidade dos Resíduos
+        st.write("**Teste de Normalidade dos Resíduos (Shapiro-Wilk):**")
+        st.write(f"**P-valor**: {shapiro_p_value:.4f} {'✅ Normal' if shapiro_p_value > 0.05 else '❌ Não Normal'}")
 
         # ======================= 🟡 4. Exibição dos Dados =======================
         st.subheader("📋 Tabela de Dados Carregados")
