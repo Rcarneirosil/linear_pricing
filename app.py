@@ -6,11 +6,11 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 import scipy.stats as stats
 import altair as alt
 
-st.title("📊 Dashboard de Análise de Elasticidade")
+st.title("📊 Dashboard de Análise de Elasticidade e Preço Ótimo")
 
 # Upload de dados
-st.header("📂 Carregue seus dados")
-uploaded_file = st.file_uploader("Carregue um arquivo CSV com duas colunas: Preço (P) e Quantidade (Q)", type=["csv"])
+st.subheader("📂 Carregue seus dados")
+uploaded_file = st.file_uploader("Carregue um arquivo CSV com duas colunas: Preço (P) e Quantidade (Q) separado por ';'", type=["csv"])
 
 if uploaded_file is not None:
     data = pd.read_csv(uploaded_file, sep=";")
