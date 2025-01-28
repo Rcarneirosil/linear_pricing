@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 import altair as alt
 
-st.title("App de Elasticidade via Regressão Linear")
+st.title("Cálculo de Elasticidade via Regressão Linear")
 
 # Upload de dados
 st.header("Carregue seus dados")
