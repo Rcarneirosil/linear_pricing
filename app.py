@@ -109,24 +109,22 @@ else:
 # P-valor da correlação com ✔️ caso seja significativo
 p_status = "<span style='color:blue;'>✅ Normal</span>" if p_value < 0.05 else "<span style='color:blue;'>❌ Não Normal</span>"
 
-# Lista formatada com estatísticas (todas as avaliações agora estão azuis)
+# Lista formatada com estatísticas (valores no padrão brasileiro)
 stats_list = f"""
-- **Coeficiente de Determinação (R²):** {r_squared:,.4f} {r2_status}  
-- **Intercepto (α):** {intercept:,.2f}  
-- **Coeficiente Angular (β):** {slope:,.2f}  
-- **Correlação de Pearson:** {correlation:,.4f}  
-- **P-valor da Correlação:** {p_value:,.4f} {p_status}  
-- **Erro Absoluto Médio (MAE):** {mae:,.2f}  
-- **Erro Padrão dos Resíduos (RMSE):** {rmse:,.2f}  
-- **Média dos Resíduos:** {residuals_mean:,.2e}  
+- **Coeficiente de Determinação (R²):** {r_squared:,.4f}.replace(".", "X").replace(",", ".").replace("X", ",") {r2_status}  
+- **Intercepto (α):** {intercept:,.2f}.replace(".", "X").replace(",", ".").replace("X", ",")  
+- **Coeficiente Angular (β):** {slope:,.2f}.replace(".", "X").replace(",", ".").replace("X", ",")  
+- **Correlação de Pearson:** {correlation:,.4f}.replace(".", "X").replace(",", ".").replace("X", ",")  
+- **P-valor da Correlação:** {p_value:,.4f}.replace(".", "X").replace(",", ".").replace("X", ",") {p_status}  
+- **Erro Absoluto Médio (MAE):** {mae:,.2f}.replace(".", "X").replace(",", ".").replace("X", ",")  
+- **Erro Padrão dos Resíduos (RMSE):** {rmse:,.2f}.replace(".", "X").replace(",", ".").replace("X", ",")  
+- **Média dos Resíduos:** {residuals_mean:,.2e}.replace(".", "X").replace(",", ".").replace("X", ",")  
 - **Teste de Normalidade dos Resíduos (Shapiro-Wilk):**  
-  **P-valor:** {shapiro_p_value:,.4f} <span style='color:blue;'>{'✅ Normal' if shapiro_p_value > 0.05 else '❌ Não Normal'}</span>
+  **P-valor:** {shapiro_p_value:,.4f}.replace(".", "X").replace(",", ".").replace("X", ",") <span style='color:blue;'>{'✅ Normal' if shapiro_p_value > 0.05 else '❌ Não Normal'}</span>
 """
 
-st.markdown(stats_list, unsafe_allow_html=True)
-
-
-        st.markdown(stats_list.replace(".", "X").replace(",", ".").replace("X", ","))
+# Exibir estatísticas complementares com separadores formatados
+st.markdown(stats_list.replace(".", "X").replace(",", ".").replace("X", ","), unsafe_allow_html=True)
 
         # ======================= 🟡 4. Exibição dos Dados =======================
         st.subheader("📋 Tabela de Dados Carregados")
