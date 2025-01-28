@@ -46,21 +46,28 @@ if uploaded_file is not None:
         st.write(f"Elasticidade-Preço da Demanda: {elasticity:.2f}")
         st.write(f"Preço Ótimo (E = -1): {price_optimal:.2f}")
 
-        # Previsões para a linha de regressão
-        data['Predicted'] = model.predict(X)
+        # Criando um intervalo contínuo de preços para a reta de regressão
+        price_range = np.linspace(data['Price'].min(), data['Price'].max(), 100).reshape(-1, 1)
+        predicted_range = model.predict(price_range)
+
+        regression_df = pd.DataFrame({'Price': price_range.flatten(), 'Predicted': predicted_range.flatten()})
 
         # Gráfico interativo com Altair
-        chart = alt.Chart(data).mark_circle(size=60, color="blue").encode(
+        scatter_chart = alt.Chart(data).mark_circle(size=60, color="blue").encode(
             x=alt.X('Price', title="Preço"),
             y=alt.Y('Quantity', title="Quantidade"),
-            tooltip=['Price', 'Quantity', 'Predicted']
-        ).properties(
-            title="Regressão Linear: Preço vs Quantidade",
-            width=700,
-            height=400
-        ) + alt.Chart(data).mark_line(color='red', strokeWidth=2).encode(
+            tooltip=['Price', 'Quantity']
+        )
+
+        line_chart = alt.Chart(regression_df).mark_line(color='red', strokeWidth=2).encode(
             x='Price',
             y='Predicted'
         )
 
-        st.altair_chart(chart, use_container_width=True)
+        final_chart = (scatter_chart + line_chart).properties(
+            title="Regressão Linear: Preço vs Quantidade",
+            width=700,
+            height=400
+        )
+
+        st.altair_chart(final_chart, use_container_width=True)
