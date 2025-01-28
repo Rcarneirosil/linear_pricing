@@ -5,16 +5,14 @@ from sklearn.linear_model import LinearRegression
 import scipy.stats as stats
 import altair as alt
 
-st.title("📊 Dashboard de Elasticidade via Regressão Linear")
+st.title("📊 Dashboard de Análise de Elasticidade")
 
 # Upload de dados
-st.header("Carregue seus dados 📂")
+st.header("📂 Carregue seus dados")
 uploaded_file = st.file_uploader("Carregue um arquivo CSV com duas colunas: Preço (P) e Quantidade (Q)", type=["csv"])
 
 if uploaded_file is not None:
     data = pd.read_csv(uploaded_file, sep=";")
-    st.write("📌 **Dados carregados:**")
-    st.write(data)
 
     # Verifica se há duas colunas
     if data.shape[1] != 2:
@@ -59,39 +57,49 @@ if uploaded_file is not None:
         x_min, x_max = data['Price'].min(), data['Price'].max()
         y_min, y_max = data['Quantity'].min(), data['Quantity'].max()
 
-        # 📊 Criar gráfico de dispersão com escala dinâmica
+        # ======================= 🟢 1. Cabeçalho do Dashboard =======================
+        st.subheader("📌 Indicadores Principais")
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.metric("Preço Ótimo (E = -1)", f"{price_optimal:.2f}")
+        with col2:
+            st.metric("Elasticidade-Preço da Demanda", f"{elasticity:.2f}")
+
+        # ======================= 🔵 2. Gráfico de Regressão =======================
+        st.subheader("📈 Regressão Linear: Preço vs Quantidade")
+
         scatter_chart = alt.Chart(data).mark_circle(size=60, color="blue").encode(
             x=alt.X('Price', title="Preço", scale=alt.Scale(domain=(x_min, x_max))),
             y=alt.Y('Quantity', title="Quantidade", scale=alt.Scale(domain=(y_min, y_max))),
             tooltip=['Price', 'Quantity']
         )
 
-        # 📈 Criar linha da regressão com escala dinâmica
         line_chart = alt.Chart(regression_df).mark_line(color='red', strokeWidth=2).encode(
             x=alt.X('Price', scale=alt.Scale(domain=(x_min, x_max))),
             y=alt.Y('Predicted', scale=alt.Scale(domain=(y_min, y_max)))
         )
 
-        # 📊 Combinar gráficos e exibir
         final_chart = (scatter_chart + line_chart).properties(
-            title="Regressão Linear: Preço vs Quantidade",
             width=700,
             height=400
         )
 
-        # Exibir métricas calculadas
-        st.subheader("📌 Resultados Estatísticos")
-        col1, col2 = st.columns(2)
+        st.altair_chart(final_chart, use_container_width=True)
 
-        with col1:
+        # ======================= 🟠 3. Demais Métricas Estatísticas =======================
+        st.subheader("📊 Estatísticas Complementares")
+        col3, col4 = st.columns(2)
+
+        with col3:
             st.metric("Intercepto (α)", f"{intercept:.2f}")
             st.metric("Coeficiente Angular (β)", f"{slope:.2f}")
-            st.metric("Elasticidade-Preço da Demanda", f"{elasticity:.2f}")
 
-        with col2:
-            st.metric("Preço Ótimo (E = -1)", f"{price_optimal:.2f}")
+        with col4:
             st.metric("Coeficiente de Determinação (R²)", f"{r_squared:.4f}")
             st.metric("Correlação de Pearson", f"{correlation:.4f}")
             st.metric("P-valor", f"{p_value:.4f}")
 
-        st.altair_chart(final_chart, use_container_width=True)
+        # ======================= 🟡 4. Exibição dos Dados =======================
+        st.subheader("📋 Tabela de Dados Carregados")
+        st.write(data)
