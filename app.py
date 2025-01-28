@@ -10,7 +10,7 @@ st.title("📊 Dashboard de Análise de Elasticidade")
 
 # Upload de dados
 st.header("📂 Carregue seus dados")
-uploaded_file = st.file_uploader("Carregue um arquivo CSV com duas colunas: Preço (P) e Quantidade (Q)", type=["csv"])
+uploaded_file = st.file_uploader("Carregue um arquivo CSV com duas colunas: Preço (P) e Quantidade (Q) - use separador ';'", type=["csv"])
 
 if uploaded_file is not None:
     data = pd.read_csv(uploaded_file, sep=";")
@@ -70,9 +70,9 @@ if uploaded_file is not None:
         col1, col2 = st.columns(2)
 
         with col1:
-            st.metric("Preço Ótimo (E = -1)", f"{price_optimal:.2f}")
+            st.metric("Preço Ótimo (E = -1)", f"{price_optimal:,.2f}".replace(".", "X").replace(",", ".").replace("X", ","))
         with col2:
-            st.metric("Elasticidade-Preço da Demanda", f"{elasticity:.2f}")
+            st.metric("Elasticidade-Preço da Demanda", f"{elasticity:,.2f}".replace(".", "X").replace(",", ".").replace("X", ","))
 
         # ======================= 🔵 2. Gráfico de Regressão =======================
         st.subheader("📈 Regressão Linear: Preço vs Quantidade")
@@ -100,30 +100,30 @@ if uploaded_file is not None:
 
         # Avaliação do R² com ícones 🔴🟡🟢
         if r_squared < 0.3:
-            r2_status = "🔴 Baixo"
+            r2_status = "🔴 - Baixo"
         elif 0.3 <= r_squared < 0.7:
-            r2_status = "🟡 Regular"
+            r2_status = "🟡 - Regular"
         else:
-            r2_status = "🟢 Excelente"
+            r2_status = "🟢 - Excelente"
 
         # P-valor da correlação com ✔️ caso seja significativo
         p_status = "✔️" if p_value < 0.05 else "❌"
 
         # Lista formatada com estatísticas
         stats_list = f"""
-        - **Intercepto (α):** {intercept:.2f}  
-        - **Coeficiente Angular (β):** {slope:.2f}  
-        - **Erro Absoluto Médio (MAE):** {mae:.2f}  
-        - **Erro Padrão dos Resíduos (RMSE):** {rmse:.2f}  
-        - **Coeficiente de Determinação (R²):** {r_squared:.4f} {r2_status}  
-        - **Correlação de Pearson:** {correlation:.4f}  
-        - **P-valor da Correlação:** {p_value:.4f} {p_status}  
-        - **Média dos Resíduos:** {residuals_mean:.2e}  
+        - **Coeficiente de Determinação (R²):** {r_squared:,.4f} {r2_status}  
+        - **Intercepto (α):** {intercept:,.2f}  
+        - **Coeficiente Angular (β):** {slope:,.2f}  
+        - **Correlação de Pearson:** {correlation:,.4f}  
+        - **P-valor da Correlação:** {p_value:,.4f} {p_status}  
+        - **Erro Absoluto Médio (MAE):** {mae:,.2f}  
+        - **Erro Padrão dos Resíduos (RMSE):** {rmse:,.2f}  
+        - **Média dos Resíduos:** {residuals_mean:,.2e}  
         - **Teste de Normalidade dos Resíduos (Shapiro-Wilk):**  
-          **P-valor:** {shapiro_p_value:.4f} {'✅ Normal' if shapiro_p_value > 0.05 else '❌ Não Normal'}
+          **P-valor:** {shapiro_p_value:,.4f} {'✅ Normal' if shapiro_p_value > 0.05 else '❌ Não Normal'}
         """
 
-        st.markdown(stats_list)
+        st.markdown(stats_list.replace(".", "X").replace(",", ".").replace("X", ","))
 
         # ======================= 🟡 4. Exibição dos Dados =======================
         st.subheader("📋 Tabela de Dados Carregados")
