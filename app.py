@@ -23,8 +23,8 @@ if uploaded_file is not None:
         data.columns = ['Price', 'Quantity']
 
         # Variáveis
-        X = data['Price'].values.reshape(-1, 1)  # Variável independente (Preço)
-        y = data['Quantity'].values.reshape(-1, 1)  # Variável dependente (Quantidade)
+        X = data['Price'].values.reshape(-1, 1)  
+        y = data['Quantity'].values.reshape(-1, 1)  
 
         # Regressão Linear
         model = LinearRegression()
@@ -34,12 +34,10 @@ if uploaded_file is not None:
         intercept = model.intercept_[0]
         slope = model.coef_[0][0]
 
-        # Cálculo da elasticidade-preço da demanda no ponto médio
+        # Elasticidade e preço ótimo
         mean_price = data['Price'].mean()
         mean_quantity = data['Quantity'].mean()
         elasticity = (slope * mean_price) / mean_quantity
-
-        # Cálculo do preço ótimo (E = -1)
         price_optimal = -intercept / (2 * slope)
 
         # Estatísticas do modelo
@@ -99,35 +97,33 @@ if uploaded_file is not None:
 
         # ======================= 🟠 3. Estatísticas Complementares =======================
         st.subheader("📊 Estatísticas Complementares")
-        col3, col4 = st.columns(2)
 
-        with col3:
-            st.metric("Intercepto (α)", f"{intercept:.2f}")
-            st.metric("Coeficiente Angular (β)", f"{slope:.2f}")
-            st.metric("Erro Absoluto Médio (MAE)", f"{mae:.2f}")
-            st.metric("Erro Padrão dos Resíduos (RMSE)", f"{rmse:.2f}")
+        # Avaliação do R² com ícones 🔴🟡🟢
+        if r_squared < 0.3:
+            r2_status = "🔴 Baixo"
+        elif 0.3 <= r_squared < 0.7:
+            r2_status = "🟡 Regular"
+        else:
+            r2_status = "🟢 Excelente"
 
-        with col4:
-            # Avaliação do R² com ícones 🔴🟡🟢
-            if r_squared < 0.3:
-                r2_status = "🔴 Baixo"
-            elif 0.3 <= r_squared < 0.7:
-                r2_status = "🟡 Regular"
-            else:
-                r2_status = "🟢 Excelente"
-            
-            st.metric("Coeficiente de Determinação (R²)", f"{r_squared:.4f} {r2_status}")
+        # P-valor da correlação com ✔️ caso seja significativo
+        p_status = "✔️" if p_value < 0.05 else "❌"
 
-            # P-valor da correlação com ✔️ caso seja significativo
-            p_status = "✔️" if p_value < 0.05 else "❌"
-            st.metric("P-valor da Correlação", f"{p_value:.4f} {p_status}")
+        # Lista formatada com estatísticas
+        stats_list = f"""
+        - **Intercepto (α):** {intercept:.2f}  
+        - **Coeficiente Angular (β):** {slope:.2f}  
+        - **Erro Absoluto Médio (MAE):** {mae:.2f}  
+        - **Erro Padrão dos Resíduos (RMSE):** {rmse:.2f}  
+        - **Coeficiente de Determinação (R²):** {r_squared:.4f} {r2_status}  
+        - **Correlação de Pearson:** {correlation:.4f}  
+        - **P-valor da Correlação:** {p_value:.4f} {p_status}  
+        - **Média dos Resíduos:** {residuals_mean:.2e}  
+        - **Teste de Normalidade dos Resíduos (Shapiro-Wilk):**  
+          **P-valor:** {shapiro_p_value:.4f} {'✅ Normal' if shapiro_p_value > 0.05 else '❌ Não Normal'}
+        """
 
-            st.metric("Correlação de Pearson", f"{correlation:.4f}")
-            st.metric("Média dos Resíduos", f"{residuals_mean:.2e}")
-
-        # Teste de Normalidade dos Resíduos
-        st.write("**Teste de Normalidade dos Resíduos (Shapiro-Wilk):**")
-        st.write(f"**P-valor**: {shapiro_p_value:.4f} {'✅ Normal' if shapiro_p_value > 0.05 else '❌ Não Normal'}")
+        st.markdown(stats_list)
 
         # ======================= 🟡 4. Exibição dos Dados =======================
         st.subheader("📋 Tabela de Dados Carregados")
