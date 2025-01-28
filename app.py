@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 import altair as alt
 
-st.title("Cálculo de Elasticidade via Regressão Linear")
+st.title("App de Elasticidade via Regressão Linear")
 
 # Upload de dados
 st.header("Carregue seus dados")
@@ -52,18 +52,24 @@ if uploaded_file is not None:
 
         regression_df = pd.DataFrame({'Price': price_range.flatten(), 'Predicted': predicted_range.flatten()})
 
-        # Gráfico interativo com Altair
+        # Ajustando os limites automáticos para os eixos
+        x_min, x_max = data['Price'].min(), data['Price'].max()
+        y_min, y_max = data['Quantity'].min(), data['Quantity'].max()
+
+        # Criar gráfico de dispersão com escala dinâmica
         scatter_chart = alt.Chart(data).mark_circle(size=60, color="blue").encode(
-            x=alt.X('Price', title="Preço"),
-            y=alt.Y('Quantity', title="Quantidade"),
+            x=alt.X('Price', title="Preço", scale=alt.Scale(domain=(x_min, x_max))),
+            y=alt.Y('Quantity', title="Quantidade", scale=alt.Scale(domain=(y_min, y_max))),
             tooltip=['Price', 'Quantity']
         )
 
+        # Criar linha da regressão com escala dinâmica
         line_chart = alt.Chart(regression_df).mark_line(color='red', strokeWidth=2).encode(
-            x='Price',
-            y='Predicted'
+            x=alt.X('Price', scale=alt.Scale(domain=(x_min, x_max))),
+            y=alt.Y('Predicted', scale=alt.Scale(domain=(y_min, y_max)))
         )
 
+        # Combinar gráficos e exibir
         final_chart = (scatter_chart + line_chart).properties(
             title="Regressão Linear: Preço vs Quantidade",
             width=700,
