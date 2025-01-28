@@ -108,11 +108,22 @@ if uploaded_file is not None:
             st.metric("Erro Padrão dos Resíduos (RMSE)", f"{rmse:.2f}")
 
         with col4:
-            st.metric("Coeficiente de Determinação (R²)", f"{r_squared:.4f}")
-            st.metric("Correlação de Pearson", f"{correlation:.4f}")
-            st.metric("P-valor da Correlação", f"{p_value:.4f}")
-            st.metric("Média dos Resíduos", f"{residuals_mean:.2e}")
+            # Avaliação do R² com ícones 🔴🟡🟢
+            if r_squared < 0.3:
+                r2_status = "🔴 Baixo"
+            elif 0.3 <= r_squared < 0.7:
+                r2_status = "🟡 Regular"
+            else:
+                r2_status = "🟢 Excelente"
+            
+            st.metric("Coeficiente de Determinação (R²)", f"{r_squared:.4f} {r2_status}")
 
+            # P-valor da correlação com ✔️ caso seja significativo
+            p_status = "✔️" if p_value < 0.05 else "❌"
+            st.metric("P-valor da Correlação", f"{p_value:.4f} {p_status}")
+
+            st.metric("Correlação de Pearson", f"{correlation:.4f}")
+            st.metric("Média dos Resíduos", f"{residuals_mean:.2e}")
 
         # Teste de Normalidade dos Resíduos
         st.write("**Teste de Normalidade dos Resíduos (Shapiro-Wilk):**")
