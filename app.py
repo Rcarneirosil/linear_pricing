@@ -111,7 +111,8 @@ if uploaded_file is not None:
             st.metric("Coeficiente de Determinação (R²)", f"{r_squared:.4f}")
             st.metric("Correlação de Pearson", f"{correlation:.4f}")
             st.metric("P-valor da Correlação", f"{p_value:.4f}")
-            st.metric("Média dos Resíduos", f"{residuals_mean[0]:.2e}")
+            st.metric("Média dos Resíduos", f"{residuals_mean:.2e}")
+
 
         # Teste de Normalidade dos Resíduos
         st.write("**Teste de Normalidade dos Resíduos (Shapiro-Wilk):**")
