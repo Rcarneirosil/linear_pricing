@@ -98,30 +98,33 @@ if uploaded_file is not None:
         # ======================= 🟠 3. Estatísticas Complementares =======================
         st.subheader("📊 Estatísticas Complementares")
 
-        # Avaliação do R² com ícones 🔴🟡🟢
-        if r_squared < 0.3:
-            r2_status = "🔴 - Baixo"
-        elif 0.3 <= r_squared < 0.7:
-            r2_status = "🟡 - Regular"
-        else:
-            r2_status = "🟢 - Excelente"
+# Avaliação do R² com ícones 🔴🟡🟢
+if r_squared < 0.3:
+    r2_status = "🔴 - <span style='color:blue;'>Baixo</span>"
+elif 0.3 <= r_squared < 0.7:
+    r2_status = "🟡 - <span style='color:blue;'>Regular</span>"
+else:
+    r2_status = "🟢 - <span style='color:blue;'>Excelente</span>"
 
-        # P-valor da correlação com ✔️ caso seja significativo
-        p_status = "✅ Normal" if p_value < 0.05 else "❌ Não Normal"
+# P-valor da correlação com ✔️ caso seja significativo
+p_status = "<span style='color:blue;'>✅ Normal</span>" if p_value < 0.05 else "<span style='color:blue;'>❌ Não Normal</span>"
 
-        # Lista formatada com estatísticas
-        stats_list = f"""
-        - **Coeficiente de Determinação (R²):** {r_squared:,.4f} {r2_status}  
-        - **Intercepto (α):** {intercept:,.2f}  
-        - **Coeficiente Angular (β):** {slope:,.2f}  
-        - **Correlação de Pearson:** {correlation:,.4f}  
-        - **P-valor da Correlação:** {p_value:,.4f} {p_status}  
-        - **Erro Absoluto Médio (MAE):** {mae:,.2f}  
-        - **Erro Padrão dos Resíduos (RMSE):** {rmse:,.2f}  
-        - **Média dos Resíduos:** {residuals_mean:,.2e}  
-        - **Teste de Normalidade dos Resíduos (Shapiro-Wilk):**  
-          **P-valor:** {shapiro_p_value:,.4f} {'✅ Normal' if shapiro_p_value > 0.05 else '❌ Não Normal'}
-        """
+# Lista formatada com estatísticas (todas as avaliações agora estão azuis)
+stats_list = f"""
+- **Coeficiente de Determinação (R²):** {r_squared:,.4f} {r2_status}  
+- **Intercepto (α):** {intercept:,.2f}  
+- **Coeficiente Angular (β):** {slope:,.2f}  
+- **Correlação de Pearson:** {correlation:,.4f}  
+- **P-valor da Correlação:** {p_value:,.4f} {p_status}  
+- **Erro Absoluto Médio (MAE):** {mae:,.2f}  
+- **Erro Padrão dos Resíduos (RMSE):** {rmse:,.2f}  
+- **Média dos Resíduos:** {residuals_mean:,.2e}  
+- **Teste de Normalidade dos Resíduos (Shapiro-Wilk):**  
+  **P-valor:** {shapiro_p_value:,.4f} <span style='color:blue;'>{'✅ Normal' if shapiro_p_value > 0.05 else '❌ Não Normal'}</span>
+"""
+
+st.markdown(stats_list, unsafe_allow_html=True)
+
 
         st.markdown(stats_list.replace(".", "X").replace(",", ".").replace("X", ","))
 
