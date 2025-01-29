@@ -106,7 +106,7 @@ if uploaded_file is not None:
 
             # Criando um layout flexível para alinhamento
             st.write(f"""
-            <div style="display: flex; align-items: center; gap: 5px;">
+            <div style="display: flex; align-items: center; gap: 5px; margin-top: 10px">
                 {filled_circles}{empty_circles}
             </div>
             """, unsafe_allow_html=True)
