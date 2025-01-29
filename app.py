@@ -79,7 +79,8 @@ if uploaded_file is not None:
         with col2:
             st.metric("Elasticidade-Preço da Demanda", f"{elasticity:,.2f}".replace(".", "X").replace(",", ".").replace("X", ","))
         with col3:
-            st.markdown("### Qualidade do Modelo")
+            st.write('<p style="font-size: 16px; font-weight: normal;">Qualidade do Modelo</p>', unsafe_allow_html=True)
+
     
             # Definir a pontuação do modelo de 1 a 5 baseado no R²
             if r_squared < 0.2:
