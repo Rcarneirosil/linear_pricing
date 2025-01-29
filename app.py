@@ -10,10 +10,10 @@ st.title("📊 Dashboard de Análise de Elasticidade e Preço Ótimo")
 
 # Upload de dados
 st.subheader("📂 Carregue seus dados")
-uploaded_file = st.file_uploader("Carregue um arquivo CSV com duas colunas: Preço (P) e Quantidade (Q) separadas por ','", type=["csv"])
+uploaded_file = st.file_uploader("Carregue um arquivo CSV com duas colunas: Preço (P) e Quantidade (Q) separadas por ';'", type=["csv"])
 
 if uploaded_file is not None:
-    data = pd.read_csv(uploaded_file, sep=",")
+    data = pd.read_csv(uploaded_file, sep=";")
 
     # Verifica se há duas colunas
     if data.shape[1] != 2:
