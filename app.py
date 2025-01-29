@@ -14,11 +14,11 @@ uploaded_file = st.file_uploader(
     "Carregue um arquivo CSV contendo duas colunas: **Preço (P)** e **Quantidade (Q)**.",
     type=["csv"]
 )
-st.write("🔹 O arquivo deve estar no formato **CSV**, com colunas separadas por **vírgula (',')** e codificação **UTF-8**.")
-
+st.write("🔹 O arquivo deve estar no formato **CSV**, com colunas separadas por **ponto e vírgula (`;`)** e números com **vírgula (`14,50`)** como separador decimal.")
 
 if uploaded_file is not None:
-    data = pd.read_csv(uploaded_file, sep=",")
+    # Ler o CSV corretamente (separador de colunas = ; e decimal = ,)
+    data = pd.read_csv(uploaded_file, sep=";", decimal=",", encoding="utf-8")
 
     # Verifica se há duas colunas
     if data.shape[1] != 2:
