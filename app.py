@@ -18,7 +18,7 @@ st.write("🔹 O arquivo deve estar no formato **CSV**, com colunas separadas po
 
 
 if uploaded_file is not None:
-    data = pd.read_csv(uploaded_file, sep=";")
+    data = pd.read_csv(uploaded_file, sep=",")
 
     # Verifica se há duas colunas
     if data.shape[1] != 2:
