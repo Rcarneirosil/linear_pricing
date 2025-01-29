@@ -83,8 +83,8 @@ if uploaded_file is not None:
              'Qualidade do Modelo'
              '</div>', unsafe_allow_html=True)
 
-            # Definir a pontuação do modelo de 1 a 5 baseado no R²
-            if r_squared < 0.2:
+            # Definir a pontuação do modelo de 1 a 5 baseado no R² e P-valor
+            if r_squared < 0.2 or p_value > 0.05:
                 score = 1
                 color = "🔴"  # Vermelho
             elif r_squared < 0.4:
