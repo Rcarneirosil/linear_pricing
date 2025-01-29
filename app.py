@@ -80,20 +80,9 @@ if uploaded_file is not None:
             st.metric("Elasticidade-Preço da Demanda", f"{elasticity:,.2f}".replace(".", "X").replace(",", ".").replace("X", ","))
         with col3:
             st.write('<div style="font-size: 16px; font-weight: normal; display: flex; align-items: center; gap: 5px;">'
-                     'Qualidade do Modelo'
-                     '</div>', unsafe_allow_html=True)
+             'Qualidade do Modelo'
+             '</div>', unsafe_allow_html=True)
 
-            # Construção das bolinhas: preenchidas à esquerda e vazias à direita
-            filled_circles = color * score
-            empty_circles = "⚪" * (5 - score)
-
-            # Criando um layout flexível para alinhamento
-            st.write(f"""
-            <div style="display: flex; align-items: center; gap: 5px;">
-                {filled_circles}{empty_circles}
-            </div>
-            """, unsafe_allow_html=True)
-  
             # Definir a pontuação do modelo de 1 a 5 baseado no R²
             if r_squared < 0.2:
                 score = 1
@@ -112,9 +101,15 @@ if uploaded_file is not None:
                 color = "🟢"  # Verde forte
 
             # Construção das bolinhas: preenchidas à esquerda e vazias à direita
-            filled_circles = color * score
-            empty_circles = "⚪" * (5 - score)
-            st.markdown(f"### {filled_circles}{empty_circles}")
+            filled_circles = "".join([color] * score)  # Evita erro de multiplicação de emoji
+            empty_circles = "".join(["⚪"] * (5 - score))
+
+            # Criando um layout flexível para alinhamento
+            st.write(f"""
+            <div style="display: flex; align-items: center; gap: 5px;">
+                {filled_circles}{empty_circles}
+            </div>
+            """, unsafe_allow_html=True)
 
         # ======================= 🔵 2. Gráfico de Regressão =======================
         st.subheader("📈 Regressão Linear: Preço vs Quantidade")
