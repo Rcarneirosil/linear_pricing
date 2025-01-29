@@ -103,7 +103,6 @@ with col3:
     empty_circles = "⚪" * (5 - score)
     st.markdown(f"### {filled_circles}{empty_circles}")
 
-
         # ======================= 🔵 2. Gráfico de Regressão =======================
         st.subheader("📈 Regressão Linear: Preço vs Quantidade")
 
