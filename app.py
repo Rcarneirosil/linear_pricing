@@ -71,13 +71,38 @@ if uploaded_file is not None:
         y_min, y_max = data['Quantity'].min(), data['Quantity'].max()
 
         # ======================= 🟢 1. Indicadores Principais =======================
-        st.subheader("📌 Indicadores Principais")
-        col1, col2 = st.columns(2)
+st.subheader("📌 Indicadores Principais")
+col1, col2, col3 = st.columns(3)
 
-        with col1:
-            st.metric("Preço Ótimo (E = -1)", f"{price_optimal:,.2f}".replace(".", "X").replace(",", ".").replace("X", ","))
-        with col2:
-            st.metric("Elasticidade-Preço da Demanda", f"{elasticity:,.2f}".replace(".", "X").replace(",", ".").replace("X", ","))
+with col1:
+    st.metric("Preço Ótimo (E = -1)", f"{price_optimal:,.2f}".replace(".", "X").replace(",", ".").replace("X", ","))
+with col2:
+    st.metric("Elasticidade-Preço da Demanda", f"{elasticity:,.2f}".replace(".", "X").replace(",", ".").replace("X", ","))
+with col3:
+    st.markdown("### Qualidade do Modelo")
+    
+    # Definir a pontuação do modelo de 1 a 5 baseado no R²
+    if r_squared < 0.2:
+        score = 1
+        color = "🔴"  # Vermelho
+    elif r_squared < 0.4:
+        score = 2
+        color = "🟠"  # Laranja
+    elif r_squared < 0.6:
+        score = 3
+        color = "🟡"  # Amarelo
+    elif r_squared < 0.8:
+        score = 4
+        color = "🟢"  # Verde claro
+    else:
+        score = 5
+        color = "🟢"  # Verde forte
+
+    # Construção das bolinhas: preenchidas à esquerda e vazias à direita
+    filled_circles = color * score
+    empty_circles = "⚪" * (5 - score)
+    st.markdown(f"### {filled_circles}{empty_circles}")
+
 
         # ======================= 🔵 2. Gráfico de Regressão =======================
         st.subheader("📈 Regressão Linear: Preço vs Quantidade")
