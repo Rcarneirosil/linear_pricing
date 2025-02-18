@@ -107,12 +107,18 @@ if uploaded_file is not None:
         coef_df = pd.DataFrame.from_dict(coefficients, orient='index', columns=['Valor'])
         st.dataframe(coef_df.style.format("{:.2f}"))
         
-        # Multicolinearidade
+        # Multicolinearidade (VIF)
+        vif_data = pd.DataFrame()
+        vif_data["Variável"] = X.columns
+        vif_data["VIF"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
+
         st.write("**Multicolinearidade (VIF):**")
-        st.write(vif_data.style.format({"VIF": "{:.1f}"})
-                  .highlight_between(subset=["VIF"], low=0, high=5, color="lightgreen")
-                  .highlight_between(subset=["VIF"], low=5, high=10, color="orange")
-                  .highlight_between(subset=["VIF"], low=10, high=None, color="red"))
+        st.dataframe(
+            vif_data.style.format({"VIF": "{:.1f}"})
+            .highlight_between(subset=["VIF"], left=0, right=5, color="lightgreen")
+            .highlight_between(subset=["VIF"], left=5, right=10, color="orange")
+            .highlight_between(subset=["VIF"], left=10, right=np.inf, color="red")
+        )
         
         # Pressupostos
         st.write("**Testes Estatísticos:**")
