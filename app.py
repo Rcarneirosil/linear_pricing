@@ -165,7 +165,7 @@ if uploaded_file is not None:
         - **Correlação de Pearson:** {correlation:,.4f}  
         - **Média dos Resíduos:** {residuals_mean:,.2e}  
         - **Teste de Normalidade dos Resíduos (Shapiro-Wilk):**  
-          **P-valor:** {shapiro_p_value:,.4f} {'✅ Normal' if shapiro_p_value > 0.05 else '❌ Não Normal'}  
+          **P-valor:** {shapiro_p_value:,.4f} {'✅ Significativo' if shapiro_p_value > 0.05 else '❌ Não Significativo'}  
         - **Teste de Heterocedasticidade (Breusch-Pagan):**  
           **P-valor:** {bp_p_value:,.4f} {'✅ Homocedástico' if bp_p_value > 0.05 else '❌ Heterocedástico'}
         """
