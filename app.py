@@ -146,6 +146,10 @@ if uploaded_file is not None:
         # P-valor da correlação com ✔️ caso seja significativo
         p_status = "✅ Normal" if p_value < 0.05 else "❌ Não Normal"
 
+        # Teste de Heteroccedasticidade (Breusch-Pagan)
+        from statsmodels.stats.diagnostic import het_breuschpagan
+        bp_lm, bp_p_value, _, _ = het_breuschpagan(residuals.flatten(), X)
+
         # Lista formatada com estatísticas
         stats_list = f"""
         - **Intercepto (α):** {intercept:,.2f}  
@@ -157,7 +161,9 @@ if uploaded_file is not None:
         - **Correlação de Pearson:** {correlation:,.4f}  
         - **Média dos Resíduos:** {residuals_mean:,.2e}  
         - **Teste de Normalidade dos Resíduos (Shapiro-Wilk):**  
-          **P-valor:** {shapiro_p_value:,.4f} {'✅ Normal' if shapiro_p_value > 0.05 else '❌ Não Normal'}
+          **P-valor:** {shapiro_p_value:,.4f} {'✅ Normal' if shapiro_p_value > 0.05 else '❌ Não Normal'}  
+        - **Teste de Heterocedasticidade (Breusch-Pagan):**  
+          **P-valor:** {bp_p_value:,.4f} {'✅ Homocedástico' if bp_p_value > 0.05 else '❌ Heterocedástico'}
         """
 
         st.markdown(stats_list.replace(".", "X").replace(",", ".").replace("X", ","))
