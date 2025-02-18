@@ -144,7 +144,7 @@ if uploaded_file is not None:
             r2_status = "🟢 Excelente"
 
         # P-valor da correlação com ✔️ caso seja significativo
-        p_status = "✅ Normal" if p_value < 0.05 else "❌ Não Normal"
+        p_status = "✅ Significativo" if p_value < 0.05 else "❌ Não Significativo"
 
         # Teste de Heteroccedasticidade (Breusch-Pagan)
         from statsmodels.stats.diagnostic import het_breuschpagan
