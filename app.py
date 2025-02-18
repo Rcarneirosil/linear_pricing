@@ -148,7 +148,11 @@ if uploaded_file is not None:
 
         # Teste de Heteroccedasticidade (Breusch-Pagan)
         from statsmodels.stats.diagnostic import het_breuschpagan
-        bp_lm, bp_p_value, _, _ = het_breuschpagan(residuals.flatten(), X)
+        from statsmodels.tools import add_constant
+
+        # Adiciona constante ao X para o teste
+        X_with_const = add_constant(X)
+        bp_lm, bp_p_value, _, _ = het_breuschpagan(residuals.flatten(), X_with_const)
 
         # Lista formatada com estatísticas
         stats_list = f"""
