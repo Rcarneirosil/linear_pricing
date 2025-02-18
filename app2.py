@@ -109,7 +109,11 @@ if uploaded_file is not None:
         
         # Multicolinearidade
         st.write("**Multicolinearidade (VIF):**")
-        st.dataframe(vif_data.style.format({"VIF": "{:.1f}"}).highlight_between(subset="VIF", low=0, high=5, color="lightgreen").highlight_between(subset="VIF", low=5, high=10, color="orange").highlight_between(subset="VIF", low=10, high=None, color="red"))
+        st.write(vif_data.style.format({"VIF": "{:.1f}"})
+                   .highlight_between(subset="VIF", low=0, high=5, color="lightgreen")
+                   .highlight_between(subset="VIF", low=5, high=10, color="orange")
+                   .highlight_between(subset="VIF", low=10, high=None, color="red"))
+
         
         # Pressupostos
         st.write("**Testes Estatísticos:**")
